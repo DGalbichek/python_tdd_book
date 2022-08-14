@@ -3,3 +3,4 @@ virtualenv
 __pycache__
 *.pyc
 chromedriver.exe
+.idea

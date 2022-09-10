@@ -14,6 +14,9 @@
                 <div class="container-fluid">
                     <a class="navbar-brand" href="/">Superlists</a>
                     {% if user and user.email %}
+                        <ul class="nav navbar-nav navbar-left">
+                            <li><a href="{% url 'my_lists' user.email %}}">My lists</a></li>
+                        </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li class="navbar-text">Logged in as {{ user.email }}</li>
                             <li><a href="{% url 'logout' %}">Log out</a></li>
@@ -42,15 +45,17 @@
                 <div class="offset-3 col-6">
                     <div class="p-5 mb-4 bg-light rounded-3 text-center">
                         <h1 class="display-3">{% block header_text %}{% endblock %}</h1>
-                        <form method="POST" action="{% block form_action %}{% endblock %}">
-                            {{ form.text }}
-                            {% csrf_token %}
-                            {% if form.errors %}
-                                <div class="form-group has-error">
-                                    <span class="help-block">{{ form.text.errors }}</span>
-                                </div>
-                            {% endif %}
-                        </form>
+                        {% block list_form %}
+                            <form method="POST" action="{% block form_action %}{% endblock %}">
+                                {{ form.text }}
+                                {% csrf_token %}
+                                {% if form.errors %}
+                                    <div class="form-group has-error">
+                                        <span class="help-block">{{ form.text.errors }}</span>
+                                    </div>
+                                {% endif %}
+                            </form>
+                        {% endblock %}
                     </div>
                 </div>
             </div>
@@ -60,14 +65,20 @@
                     {% block table %}{% endblock %}
                 </div>
             </div>
-            <script src="/static/jquery-3.6.1.js"></script>
-            <script src="/static/list.js"></script>
 
-            <script>
-            $(document).ready(function () {
-                window.Superlists.initialize();
-            });
-            </script>
+            <div class="row">
+                <div class="offset-3 col-6">
+                    {% block extra_content %}{% endblock %}
+                </div>
+            </div>
         </div>
+        <script src="/static/jquery-3.6.1.js"></script>
+        <script src="/static/list.js"></script>
+
+        <script>
+        $(document).ready(function () {
+            window.Superlists.initialize();
+        });
+        </script>
     </body>
 </html>
